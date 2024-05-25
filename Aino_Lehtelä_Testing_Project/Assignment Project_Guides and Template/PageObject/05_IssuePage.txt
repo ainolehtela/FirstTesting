@@ -1,0 +1,70 @@
+
+#******************** Settings ************************
+
+*** Settings ***
+Documentation	Testing the issue functionality. Creating issue with valid credentials. Updating and deleting a issue.
+
+Pre Condition Project must be created by the user before 
+Post Condition 	Close All Browsers
+Tags	Issue, TS-4-Issue
+
+#******************* Common Variables ********************
+
+
+*** Variables ***
+
+IssueURL = https://gitlab.com/Aino_L/testproject/-/issues/new
+CreatedIssueURL = https://gitlab.com/Aino_L/testproject/-/issues/1
+Title = First issue
+Type = Issue 
+IssueConfidential = This issue is confidential and should only be visible to team members with at least Reporter access
+Assignee = Unassigned
+DueDate = 2024-05-26
+Title2 = Issue
+Empty = 
+
+#******************** Test Cases *************************
+
+*** Test Case ***
+
+Create issue
+	Navigate to new issue   IssueURL
+	Input Title   Title
+	Choose Type   Type
+	Input Desciption   Empty
+	Tick the box   IssueConfidential
+	Select Assignee   Assignee
+	Select Milestone   Empty
+	Select Labels  Empty
+	Due date   DueDate
+	Submit Issue form
+ 	Verify Page Should Contain First issue page
+
+
+Update name of issue
+	Navigate to the created issue page  CreatedIssueURL
+	Click Edit (in the upper right corner)
+	Change name (First issue) to   Title2
+	Save changes
+ 	Verify Page Should Contain Issue page
+
+
+Create second issue with privious updated name
+	Navigate to new issue  IssueURL
+	Input Title  Title2
+	Choose Type  Type
+	Input Desciption  Empty
+	Tick the box  IssueConfidential
+	Select Assignee  Assignee
+	Select Milestone  Empty
+	Select Labels  Empty
+	Due date  DueDate
+	Submit Issue form
+ 	Verify Page Should Contain Issue page
+
+Delete first issue
+	Navigate to the created issue page  CreatedIssueURL
+	Click Issue actions (three dots in the upper right corner)
+	Select Delete issue
+	Confirm deleting issue
+ 	Verify Page Should Contain message The issue was successfully deleted.

@@ -1,0 +1,108 @@
+
+#******************** Settings ************************
+
+*** Settings ***
+
+Documentation	Testing the project creation function. Blank project and template project creation, valid and invalid credentials. Updating and deleting a project.
+
+Pre Condition	 Register user
+Post Condition	 Close All Browsers
+Tags	Project, template project, blank project, TS-3-Project
+
+
+#******************* Common Variables ********************
+
+*** Variables ***
+
+NewProjectURL = https://gitlab.com/projects/new
+ProjectPageURL = https://gitlab.com/projects/
+ProjectName = TestProject
+ProjectURL = UserName
+ProjectSlug = testproject
+VisibilityLevel = Private
+ProjectConfiguration = Initialize repository with a README
+Template = Sample GitLab Project
+FirstProject = First project
+TemplateName = TestTemplate
+TemplateSlug = testtemplate
+TemplateName2 = TestTemplate2
+FirstProject = First project
+FirstProjectSlug = first-project
+
+#******************** Test Cases *************************
+
+*** Test Case ***
+
+# Positive Tests
+
+Create blank project
+	Navigate to Project Page   NewProjectURL
+	Select Create blank project
+	Input Project name	 ProjectName
+	Select Project URL	 ProjectURL
+	Input Project slug	 ProjectSlug
+	Select Visibility Level   VisibilityLevel
+	Select Project Configuration   ProjectConfiguration
+	Submit Project form
+ 	Verify Page Should Contain TestProject page
+
+
+Create template project 
+	Navigate to Project Page   NewProjectURL
+	Select Create from  template
+	Use Built-in template   Template
+	Input Project name	 TemplateName
+	Select Project URL	 ProjectURL
+	Input Project slug	 TemplateSlug
+	Select Visibility Level   VisibilityLevel
+	Submit Project form
+ 	Verify Page Should Contain TestTemplate page
+
+
+Update name of template project
+	Navigate to Projects Page   ProjectPageURL
+	Select TestTemplate
+	Click More Actions (three dots in the upper right corner)
+	Select Project settings
+	Input Project name   TemplateName2
+	Save changes
+	Verify That message should show Project 'TestTemplate2' was successfully updated.
+
+Delete template project
+	Navigate to Projects Page   ProjectPageURL
+	Select TestTemplate2
+	Click More Actions (three pdots in the upper right corner)
+	Select Project settings
+	Scroll to the Advanced and click Expand
+	Scroll down and click Delete project
+	Enter UserName/testtemplate
+	Submit Delete Form
+	Verify That message should show Project 'Aino Lehtelä / TestTemplate2' is in the process of being deleted.
+	
+Valide that message is showing Project 'First project' was successfully created.
+	Navigate to Project Page   NewProjectURL
+	Select Create blank project
+	Input Project name	 FirstProject
+	Select Project URL	 ProjectURL
+	Input Project slug	 FirstProjectSlug
+	Select Visibility Level   VisibilityLevel
+	Select Project Configuration   ProjectConfiguration
+	Submit Project form
+ 	Verify Page Should show Project 'First project" was successfully created.
+
+# Negative Test
+
+Create a blank project with the previous same name
+	Navigate to Project Page   NewProjectURL
+	Select Create blank project
+	Input Project name	 FirstProject
+	Select Project URL	 ProjectURL
+	Input Project slug	 FirstProjectSlug
+	Select Visibility Level   VisibilityLevel
+	Select Project Configuration   ProjectConfiguration
+	Submit Project form
+	Verify That Error message should show The form contains the following errors: Project namespace name has already been taken Name has already been taken Path has already been taken
+
+
+
+

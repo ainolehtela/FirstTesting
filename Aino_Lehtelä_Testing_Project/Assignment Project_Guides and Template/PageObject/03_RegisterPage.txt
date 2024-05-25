@@ -1,0 +1,103 @@
+
+#******************** Settings ************************
+
+*** Settings ***
+
+Documentation	Testing the user registration. Registration Test scenario with verification, valid and invalid credentials.
+
+Pre Condition	Open Browser
+Post Condition	Close All Browsers
+Tags	Register, TS-2-Register
+
+#******************* Common Variables ********************
+
+*** Variables ***
+
+RegisterUrl = https://gitlab.com/users/sign_up
+IWantTo: Set up a new personal account
+FirstName = Aino
+LastName = Lehtelä
+Username = ******
+Email = ******
+Password = ******
+Empty=
+Invalid_FirstName = XYZZZ
+Invalid_LastName = XYZZZ
+Invalid_UserName = XYZZZ
+Invalid_Email = XYZZZ
+Invalid_Password = ******
+
+
+
+#******************** Test Cases *************************
+
+*** Test Case ***
+
+# Positive Test
+
+Register user with valid username and password 
+	Navigate to Register Page  RegisterUrl
+	Input I want to...  IWantTo
+	Input First name  FirstName
+	Input Last name  LastName
+	Input Username  Username
+	Input Email  Email
+	Input Password  Password
+	Click Verify and do the verification
+	Submit Register Form
+    Verify Page Should Contain Identity verification Page 
+
+
+# Negative Tests
+
+Register user with same above username
+	Navigate to Register Page  RegisterUrl
+	Input I want to...  IWantTo
+	Input First name  FirstName
+	Input Last name  LastName
+	Input Username  Username
+	Input Email  Email
+	Input Password  Password
+	Click Verify and do the verification
+	Submit Register Form
+    Verify Page Should Contain Username is already taken.
+	Verify That Error message should show A user, alias, or group already exists with that username.
+
+
+Register user with empty password
+	Navigate to Register Page   RegisterUrl
+	Input I want to...  IWantTo
+	Input First name  FirstName
+	Input Last name  LastName
+	Input Username  Username
+	Input Email  Email
+	Input Password  Empty
+	Click Verify and do the verification
+	Submit Register Form
+    Verify Page Should Contain Minimum length is 8 characters. 
+
+
+Register user with invalid email
+	Navigate to Register Page  RegisterUrl
+	Input I want to...  IWantTo
+	Input First name  FirstName
+	Input Last name  LastName
+	Input Username  Username
+	Input Email  Invalid_Email
+	Input Password  Password
+	Click Verify and do the verification
+	Submit Register Form
+    Verify Page Should Contain Please provide a valid email address.
+
+Register user without recaptcha
+	Navigate to Register Page  RegisterUrl
+	Input I want to...  IWantTo
+	Input First name  FirstName
+	Input Last name  LastName
+	Input Username  Username
+	Input Email  Email
+	Input Password  Password
+	Skip  Verify
+	Submit Register Form
+    Verify Page Should Contain Complete verification to sign up.
+
