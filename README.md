@@ -1,2 +1,1 @@
-# FirstTesting
-School work
+Aino Lehtelä
